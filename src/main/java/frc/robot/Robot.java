@@ -145,6 +145,8 @@ public class Robot extends TimedRobot
   @Override
   public void teleopPeriodic()
   {
+    
+    // the robot moves in SwerveSubsystem.driveCommand
   }
 
   @Override
