@@ -135,4 +135,8 @@ public class RobotContainer
   {
     drivebase.setMotorBrake(brake);
   }
+
+  public void print(){
+    drivebase.print();
+  }
 }
