@@ -98,11 +98,17 @@ public class AbsoluteDrive extends Command
     SmartDashboard.putNumber("LimitedTranslation", translation.getX());
     SmartDashboard.putString("Translation", translation.toString());
 
+    //
+    
+    //
     // Make the robot move
     swerve.drive(translation, desiredSpeeds.omegaRadiansPerSecond, true);
 
-  }
+    System.out.println(translation.getX());
 
+  }
+  
+    
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted)
