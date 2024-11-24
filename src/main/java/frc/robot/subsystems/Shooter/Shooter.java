@@ -7,7 +7,7 @@ public class Shooter {
     private static TalonFX shooterMaster = new TalonFX(54);
     private static TalonFX shooterSlave = new TalonFX(5);
 
-    private static double vel_w = 0;
+    private static double wantedVelocity = 0;
     private static int counter = 0;
 
     public static void init() {
@@ -26,31 +26,42 @@ public class Shooter {
     public static void operate(ShooterState state){
         switch (state) {
             case STOP:
-                vel_w = 0;                
+                wantedVelocity = 0;                
                 break;
             case AMP_SHOOTING:
-                vel_w = -7500;
+                wantedVelocity = -7500;
                 break;
             case DEFLECT:
-                vel_w = 2500;
+                wantedVelocity = 2500;
                 break;
             case DEPLETE:
-                vel_w = 0.4;
+                wantedVelocity = 0.4;
                 break;
             case PODIUM_SHOOTING:
-                vel_w = 13000;
+                wantedVelocity = 13000;
                 break;
             case SUBWOOFER_SHOOTING:
-                vel_w = -12000;
+                wantedVelocity = -12000;
                 break;
     
         }
-        if (vel_w == 0) {
+        if (wantedVelocity == 0) {
             shooterMaster.set(ControlMode.PercentOutput, 0);
         } else {
-            shooterMaster.set(ControlMode.Velocity, vel_w);
+            shooterMaster.set(ControlMode.Velocity, wantedVelocity);
         }
+
+        System.out.println(shooterMaster.getSelectedSensorVelocity());
     }
-    
+
+
+
+
+
+    public static boolean readyToShoot() {
+        return Math.abs(shooterMaster.getSelectedSensorVelocity()) + 500 > Math.abs(wantedVelocity) && 
+            Math.abs(shooterMaster.getSelectedSensorVelocity()) - 500 < Math.abs(wantedVelocity) &&
+            wantedVelocity != 0;
+    }
 
 }

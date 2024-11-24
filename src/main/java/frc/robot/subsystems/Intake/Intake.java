@@ -25,6 +25,9 @@ public class Intake {
             case DEPLETE:
                 power = 0.5;
                 break;
+            case LOADING:
+                power = -0.5;
+                break;
         }
 
         intakeMotor.set(TalonFXControlMode.PercentOutput , power);
