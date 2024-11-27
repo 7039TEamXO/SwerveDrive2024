@@ -78,6 +78,7 @@ public class Robot extends TimedRobot
     // and running subsystem periodic() methods.  This must be called from the robot's periodic
     // block in order for anything in the Command-based framework to work.
     CommandScheduler.getInstance().run();
+    m_robotContainer.print();
 
   }
 
@@ -108,6 +109,9 @@ public class Robot extends TimedRobot
   @Override
   public void autonomousInit()
   {
+
+    SubsystemManager.init();
+
     m_robotContainer.setMotorBrake(true);
     m_autonomousCommand = m_robotContainer.getAutonomousCommand();
 
@@ -148,7 +152,7 @@ public class Robot extends TimedRobot
   @Override
   public void teleopPeriodic()
   {
-    SubsystemManager.operate(RobotState.TRAVEL);
+    SubsystemManager.operate(false);
     
     // the robot moves in SwerveSubsystem.driveCommand
   }

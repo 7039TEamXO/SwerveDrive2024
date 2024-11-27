@@ -33,7 +33,7 @@ public class RobotContainer
 {
 
   // Replace with CommandPS4Controller or CommandJoystick if needed
-  final CommandPS4Controller driverPS4 = new CommandPS4Controller(0);
+  // final CommandPS4Controller SubsystemManager.ps4Joystick = new CommandPS4Controller(0);
 
 
   // The robot's subsystems and commands are defined here...
@@ -63,27 +63,27 @@ public class RobotContainer
     // buttons are quick rotation positions to different ways to face
     // WARNING: default buttons are on the same buttons as the ones defined in configureBindings
     AbsoluteDriveAdv closedAbsoluteDriveAdv = new AbsoluteDriveAdv(drivebase,
-                                                                   () -> -MathUtil.applyDeadband(driverPS4.getLeftY(),
+                                                                   () -> -MathUtil.applyDeadband(SubsystemManager.ps4Joystick.getLeftY(),
                                                                                                  OperatorConstants.LEFT_Y_DEADBAND),
-                                                                   () -> -MathUtil.applyDeadband(driverPS4.getLeftX(),
+                                                                   () -> -MathUtil.applyDeadband(SubsystemManager.ps4Joystick.getLeftX(),
                                                                                                  OperatorConstants.LEFT_X_DEADBAND),
-                                                                   () -> -MathUtil.applyDeadband(driverPS4.getRightX(),
+                                                                   () -> -MathUtil.applyDeadband(SubsystemManager.ps4Joystick.getRightX(),
                                                                                                  OperatorConstants.RIGHT_X_DEADBAND),
-                                                                   driverPS4.getHID()::getTriangleButtonPressed,
-                                                                   driverPS4.getHID()::getCrossButtonPressed,
-                                                                   driverPS4.getHID()::getSquareButtonPressed,
-                                                                   driverPS4.getHID()::getCircleButtonPressed);
+                                                                   SubsystemManager.ps4Joystick.getHID()::getTriangleButtonPressed,
+                                                                   SubsystemManager.ps4Joystick.getHID()::getPSButtonPressed,
+                                                                   SubsystemManager.ps4Joystick.getHID()::getSquareButtonPressed,
+                                                                   SubsystemManager.ps4Joystick.getHID()::getCircleButtonPressed);
 
-    // Applies deadbands and inverts controls because joysticks
+    // Applies deadbands and inverts controls because joysticksy
     // are back-right positive while robot
     // controls are front-left positive
     // left stick controls translation
     // right stick controls the desired angle NOT angular rotation
     Command driveFieldOrientedDirectAngle = drivebase.driveCommand(
-        () -> MathUtil.applyDeadband(driverPS4.getLeftY(), OperatorConstants.LEFT_Y_DEADBAND),
-        () -> MathUtil.applyDeadband(driverPS4.getLeftX(), OperatorConstants.LEFT_X_DEADBAND),
-        () -> driverPS4.getRightX(),
-        () -> driverPS4.getRightY());
+        () -> MathUtil.applyDeadband(SubsystemManager.ps4Joystick.getLeftY(), OperatorConstants.LEFT_Y_DEADBAND),
+        () -> MathUtil.applyDeadband(SubsystemManager.ps4Joystick.getLeftX(), OperatorConstants.LEFT_X_DEADBAND),
+        () -> SubsystemManager.ps4Joystick.getRightX(),
+        () -> SubsystemManager.ps4Joystick.getRightY());
 
     // Applies deadbands and inverts controls because joysticks
     // are back-right positive while robot
@@ -91,14 +91,14 @@ public class RobotContainer
     // left stick controls translation
     // right stick controls the angular velocity of the robot
     Command driveFieldOrientedAnglularVelocity = drivebase.driveCommand(
-        () -> MathUtil.applyDeadband(-driverPS4.getLeftY(), OperatorConstants.LEFT_Y_DEADBAND),
-        () -> MathUtil.applyDeadband(-driverPS4.getLeftX(), OperatorConstants.LEFT_X_DEADBAND),
-        () -> -driverPS4.getRightX() * 1);
+        () -> MathUtil.applyDeadband(-SubsystemManager.ps4Joystick.getLeftY(), OperatorConstants.LEFT_Y_DEADBAND),
+        () -> MathUtil.applyDeadband(-SubsystemManager.ps4Joystick.getLeftX(), OperatorConstants.LEFT_X_DEADBAND),
+        () -> -SubsystemManager.ps4Joystick.getRightX() * 1);
 
     Command driveFieldOrientedDirectAngleSim = drivebase.simDriveCommand(
-        () -> MathUtil.applyDeadband(driverPS4.getLeftY(), OperatorConstants.LEFT_Y_DEADBAND),
-        () -> MathUtil.applyDeadband(driverPS4.getLeftX(), OperatorConstants.LEFT_X_DEADBAND),
-        () -> driverPS4.getRawAxis(2));
+        () -> MathUtil.applyDeadband(SubsystemManager.ps4Joystick.getLeftY(), OperatorConstants.LEFT_Y_DEADBAND),
+        () -> MathUtil.applyDeadband(SubsystemManager.ps4Joystick.getLeftX(), OperatorConstants.LEFT_X_DEADBAND),
+        () -> SubsystemManager.ps4Joystick.getRawAxis(2));
 
     // drivebase.setDefaultCommand(
     //     false ? driveFieldOrientedDirectAngle : driveFieldOrientedDirectAngleSim);
@@ -116,13 +116,13 @@ public class RobotContainer
   {
     // Schedule `ExampleCommand` when `exampleCondition` changes to `true`
 
-    driverPS4.cross().onTrue((Commands.runOnce(drivebase::zeroGyro)));
-    driverPS4.square().onTrue(Commands.runOnce(drivebase::addFakeVisionReading));
-    driverPS4.circle().whileTrue(
-        Commands.deferredProxy(() -> drivebase.driveToPose(
-                                   new Pose2d(new Translation2d(4, 4), Rotation2d.fromDegrees(0)))
-                              ));
-    driverPS4.triangle().whileTrue(drivebase.aimAtSpeaker(2));
+    SubsystemManager.ps4Joystick.PS().onTrue((Commands.runOnce(drivebase::zeroGyro)));
+    // SubsystemManager.ps4Joystick.square().onTrue(Commands.runOnce(drivebase::addFakeVisionReading));
+    // SubsystemManager.ps4Joystick.circle().whileTrue(
+    //     Commands.deferredProxy(() -> drivebase.driveToPose(
+    //                                new Pose2d(new Translation2d(4, 4), Rotation2d.fromDegrees(0)))
+    //                           ));
+    // SubsystemManager.ps4Joystick.triangle().whileTrue(drivebase.aimAtSpeaker(2));
     // driverXbox.x().whileTrue(Commands.runOnce(drivebase::lock, drivebase).repeatedly());
   }
 
