@@ -51,6 +51,7 @@ public class RobotContainer
     NamedCommands.registerCommand("Intake", SubsystemManager.intakeCommand);
     NamedCommands.registerCommand("Travel", SubsystemManager.travelCommand);
     NamedCommands.registerCommand("Deplete", SubsystemManager.depleteCommand);
+    NamedCommands.registerCommand("Shoot", SubsystemManager.shootCommand);
     NamedCommands.registerCommand("HighShooter", SubsystemManager.highShooterConveyorCommand);
     NamedCommands.registerCommand("LowShooter", SubsystemManager.lowShooterConveyorCommand);
 
@@ -134,7 +135,7 @@ public class RobotContainer
   public Command getAutonomousCommand()
   {
     // An example command will be run in autonomous
-    return drivebase.getAutonomousCommand("Shoot");
+    return drivebase.getAutonomousCommand("MidAuto");
   }
 
   public void setDriveMode()

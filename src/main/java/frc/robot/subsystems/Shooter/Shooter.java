@@ -51,17 +51,11 @@ public class Shooter {
             shooterMaster.set(ControlMode.Velocity, wantedVelocity);
         }
 
-        System.out.println(shooterMaster.getSelectedSensorVelocity());
     }
-
-
-
-
 
     public static boolean readyToShoot() {
         return Math.abs(shooterMaster.getSelectedSensorVelocity()) + 500 > Math.abs(wantedVelocity) && 
             Math.abs(shooterMaster.getSelectedSensorVelocity()) - 500 < Math.abs(wantedVelocity) &&
             wantedVelocity != 0;
     }
-
 }
