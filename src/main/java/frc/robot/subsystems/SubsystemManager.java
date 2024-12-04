@@ -1,7 +1,10 @@
 package frc.robot.subsystems;
 
+import java.io.File;
+
 import javax.xml.transform.Source;
 
+import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.PS4Controller;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
@@ -14,14 +17,20 @@ import frc.robot.subsystems.Intake.Intake;
 import frc.robot.subsystems.Intake.IntakeState;
 import frc.robot.subsystems.Shooter.Shooter;
 import frc.robot.subsystems.Shooter.ShooterState;
+import frc.robot.subsystems.swervedrive.SwerveSubsystem;
 
 public class SubsystemManager {
+
+    // The robot's subsystems and commands are defined here...
+    private static final SwerveSubsystem drivebase = new SwerveSubsystem(new File(Filesystem.getDeployDirectory(),
+                                                                         "swerve/falcon"));
 
     public static CommandPS4Controller ps4Joystick = new CommandPS4Controller(0);
 
     private static IntakeState intakeState;
     private static ShooterState shooterState;
     private static ConveyorState conveyorState;
+    private static boolean isLocked = false;
 
     private static RobotState state;
     private static RobotState lastState;
@@ -55,6 +64,9 @@ public class SubsystemManager {
                                 ps4Joystick.R1().getAsBoolean() ? RobotState.DEPLETE : lastState;
         }
 
+        
+        
+
         switch (state) {
             case INTAKE:
                 // Switch from Intake to Travel when the robot detects the game piece
@@ -65,19 +77,23 @@ public class SubsystemManager {
                 intakeState = IntakeState.INTAKE;
                 shooterState = ShooterState.STOP;
                 conveyorState = ConveyorState.STOP;
+                isLocked = false;
                 break;
             case DEPLETE:
                 intakeState = IntakeState.DEPLETE;
                 shooterState = ShooterState.DEPLETE;
                 conveyorState = ConveyorState.STOP;
+                isLocked = false;
                 break;
             case TRAVEL:
                 intakeState = IntakeState.STOP;
                 shooterState = ShooterState.STOP;
                 conveyorState = ConveyorState.STOP;
+                isLocked = false;
                 break;
             case SHOOT:
                 intakeState = IntakeState.INTAKE;
+                isLocked = true;
                 if(lastState != RobotState.SHOOT) {
                     conveyorState = (lastState == RobotState.HIGH_SHOOTER) ? ConveyorState.HIGH_SHOOTER : ConveyorState.LOW_SHOOTER;
                     shooterState = (lastState == RobotState.HIGH_SHOOTER) ? ShooterState.PODIUM_SHOOTING : ShooterState.SUBWOOFER_SHOOTING;
@@ -90,11 +106,13 @@ public class SubsystemManager {
                 shooterState = ShooterState.PODIUM_SHOOTING;
                 intakeState = Intake.isGamePieceIn() ? IntakeState.STOP : IntakeState.INTAKE;
                 conveyorState = ConveyorState.STOP;
+                isLocked = false;
                 break;
             case LOW_SHOOTER:
                 shooterState = ShooterState.SUBWOOFER_SHOOTING;
                 intakeState = Intake.isGamePieceIn() ? IntakeState.STOP : IntakeState.INTAKE;
                 conveyorState = ConveyorState.STOP;
+                isLocked = false;
                 break;
         }
 
@@ -105,10 +123,15 @@ public class SubsystemManager {
         Intake.operate(intakeState);
         Shooter.operate(shooterState);
         Conveyor.operate(conveyorState);
+        if (isLocked) {drivebase.lock();}
     }
 
     private static void operateAuto(RobotState chosenState) {
         state = chosenState;
         operate(true);
+    }
+
+    public static SwerveSubsystem getDriveBase(){
+        return drivebase;
     }
 }

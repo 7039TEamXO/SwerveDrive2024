@@ -53,6 +53,7 @@ public class Robot extends TimedRobot
   @Override
   public void robotInit()
   {
+    Dashboard.init();
     // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
     // autonomous chooser on the dashboard.
     m_robotContainer = new RobotContainer();
@@ -60,6 +61,7 @@ public class Robot extends TimedRobot
     // Create a timer to disable motor brake a few seconds after disable.  This will let the robot stop
     // immediately when disabled, but then also let it be pushed more 
     disabledTimer = new Timer();
+
   }
 
   /**
@@ -96,9 +98,10 @@ public class Robot extends TimedRobot
   @Override
   public void disabledPeriodic()
   {
+    
     if (disabledTimer.hasElapsed(Constants.DrivebaseConstants.WHEEL_LOCK_TIME))
     {
-      m_robotContainer.setMotorBrake(false);
+      //m_robotContainer.setMotorBrake(false);
       disabledTimer.stop();
     }
   }

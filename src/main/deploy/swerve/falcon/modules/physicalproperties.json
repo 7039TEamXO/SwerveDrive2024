@@ -4,11 +4,11 @@
 	"drive": {"gearRatio":5.4 ,"diameter":4}
   },
   "currentLimit": {
-    "drive": 40,
+    "drive": 80,
     "angle": 30
   },
   "rampRate": {
-    "drive": 0.1,
+    "drive": 0,
     "angle": 0.1
   },
   "wheelGripCoefficientOfFriction": 1.542,

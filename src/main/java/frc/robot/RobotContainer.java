@@ -36,15 +36,17 @@ public class RobotContainer
   // final CommandPS4Controller SubsystemManager.ps4Joystick = new CommandPS4Controller(0);
 
 
-  // The robot's subsystems and commands are defined here...
-  private final SwerveSubsystem drivebase = new SwerveSubsystem(new File(Filesystem.getDeployDirectory(),
-                                                                         "swerve/falcon"));
+  
 
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
    */
+
+  
+
   public RobotContainer()
   {
+
     // Configure the trigger bindings
     configureBindings();
 
@@ -63,7 +65,7 @@ public class RobotContainer
     // right stick controls the rotational velocity 
     // buttons are quick rotation positions to different ways to face
     // WARNING: default buttons are on the same buttons as the ones defined in configureBindings
-    AbsoluteDriveAdv closedAbsoluteDriveAdv = new AbsoluteDriveAdv(drivebase,
+    AbsoluteDriveAdv closedAbsoluteDriveAdv = new AbsoluteDriveAdv(SubsystemManager.getDriveBase(),
                                                                    () -> -MathUtil.applyDeadband(SubsystemManager.ps4Joystick.getLeftY(),
                                                                                                  OperatorConstants.LEFT_Y_DEADBAND),
                                                                    () -> -MathUtil.applyDeadband(SubsystemManager.ps4Joystick.getLeftX(),
@@ -80,7 +82,7 @@ public class RobotContainer
     // controls are front-left positive
     // left stick controls translation
     // right stick controls the desired angle NOT angular rotation
-    Command driveFieldOrientedDirectAngle = drivebase.driveCommand(
+    Command driveFieldOrientedDirectAngle = SubsystemManager.getDriveBase().driveCommand(
         () -> MathUtil.applyDeadband(SubsystemManager.ps4Joystick.getLeftY(), OperatorConstants.LEFT_Y_DEADBAND),
         () -> MathUtil.applyDeadband(SubsystemManager.ps4Joystick.getLeftX(), OperatorConstants.LEFT_X_DEADBAND),
         () -> SubsystemManager.ps4Joystick.getRightX(),
@@ -91,19 +93,19 @@ public class RobotContainer
     // controls are front-left positive
     // left stick controls translation
     // right stick controls the angular velocity of the robot
-    Command driveFieldOrientedAnglularVelocity = drivebase.driveCommand(
+    Command driveFieldOrientedAnglularVelocity = SubsystemManager.getDriveBase().driveCommand(
         () -> MathUtil.applyDeadband(-SubsystemManager.ps4Joystick.getLeftY(), OperatorConstants.LEFT_Y_DEADBAND),
         () -> MathUtil.applyDeadband(-SubsystemManager.ps4Joystick.getLeftX(), OperatorConstants.LEFT_X_DEADBAND),
         () -> -SubsystemManager.ps4Joystick.getRightX() * 1);
 
-    Command driveFieldOrientedDirectAngleSim = drivebase.simDriveCommand(
+    Command driveFieldOrientedDirectAngleSim = SubsystemManager.getDriveBase().simDriveCommand(
         () -> MathUtil.applyDeadband(SubsystemManager.ps4Joystick.getLeftY(), OperatorConstants.LEFT_Y_DEADBAND),
         () -> MathUtil.applyDeadband(SubsystemManager.ps4Joystick.getLeftX(), OperatorConstants.LEFT_X_DEADBAND),
         () -> SubsystemManager.ps4Joystick.getRawAxis(2));
 
     // drivebase.setDefaultCommand(
     //     false ? driveFieldOrientedDirectAngle : driveFieldOrientedDirectAngleSim);
-    drivebase.setDefaultCommand(driveFieldOrientedAnglularVelocity);
+    SubsystemManager.getDriveBase().setDefaultCommand(driveFieldOrientedAnglularVelocity);
   }
 
   /**
@@ -117,7 +119,7 @@ public class RobotContainer
   {
     // Schedule `ExampleCommand` when `exampleCondition` changes to `true`
 
-    SubsystemManager.ps4Joystick.PS().onTrue((Commands.runOnce(drivebase::zeroGyro)));
+    SubsystemManager.ps4Joystick.PS().onTrue((Commands.runOnce(SubsystemManager.getDriveBase()::zeroGyro)));
     // SubsystemManager.ps4Joystick.square().onTrue(Commands.runOnce(drivebase::addFakeVisionReading));
     // SubsystemManager.ps4Joystick.circle().whileTrue(
     //     Commands.deferredProxy(() -> drivebase.driveToPose(
@@ -135,7 +137,9 @@ public class RobotContainer
   public Command getAutonomousCommand()
   {
     // An example command will be run in autonomous
-    return drivebase.getAutonomousCommand("MidAuto");
+    // return drivebase.getAutonomousCommand(Dashboard.getSelected().getAutoName());
+        return SubsystemManager.getDriveBase().getAutonomousCommand(Autos.MID_AUTO.getAutoName());//    return drivebase.getAutonomousCommand(Dashboard.getSelected().getAutoName());
+
   }
 
   public void setDriveMode()
@@ -145,10 +149,10 @@ public class RobotContainer
 
   public void setMotorBrake(boolean brake)
   {
-    drivebase.setMotorBrake(brake);
+    SubsystemManager.getDriveBase().setMotorBrake(brake);
   }
 
   public void print(){
-    drivebase.print();
+    SubsystemManager.getDriveBase().print();
   }
 }
