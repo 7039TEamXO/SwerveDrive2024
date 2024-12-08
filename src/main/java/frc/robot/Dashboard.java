@@ -1,5 +1,6 @@
 package frc.robot;
 
+import edu.wpi.first.cscore.HttpCamera;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -9,6 +10,7 @@ public class Dashboard {
     private final static SendableChooser<String> m_chooser = new SendableChooser<>();
     private static String m_autoSelected;
     private static ShuffleboardTab driver = Shuffleboard.getTab("Driver");
+    private static HttpCamera limelightcamera = new HttpCamera("limelight", "http://10.70.39.11:5800");
 
 
     public static void init(){
@@ -24,6 +26,7 @@ public class Dashboard {
         }
 
         driver.add("Autos", m_chooser).withPosition(0, 0).withSize(5, 3);
+        driver.add("LimeLight Camera", limelightcamera).withPosition(17, 0).withSize(9, 6);
 
     }
 

@@ -93,7 +93,7 @@ public class RobotContainer
     // controls are front-left positive
     // left stick controls translation
     // right stick controls the angular velocity of the robot
-    Command driveFieldOrientedAnglularVelocity = SubsystemManager.getDriveBase().driveCommand(
+    Command driveFieldOrientedAngularVelocity = SubsystemManager.getDriveBase().driveCommand(
         () -> MathUtil.applyDeadband(-SubsystemManager.ps4Joystick.getLeftY(), OperatorConstants.LEFT_Y_DEADBAND),
         () -> MathUtil.applyDeadband(-SubsystemManager.ps4Joystick.getLeftX(), OperatorConstants.LEFT_X_DEADBAND),
         () -> -SubsystemManager.ps4Joystick.getRightX() * 1);
@@ -105,7 +105,7 @@ public class RobotContainer
 
     // drivebase.setDefaultCommand(
     //     false ? driveFieldOrientedDirectAngle : driveFieldOrientedDirectAngleSim);
-    SubsystemManager.getDriveBase().setDefaultCommand(driveFieldOrientedAnglularVelocity);
+    SubsystemManager.getDriveBase().setDefaultCommand(driveFieldOrientedAngularVelocity);
   }
 
   /**
@@ -150,9 +150,5 @@ public class RobotContainer
   public void setMotorBrake(boolean brake)
   {
     SubsystemManager.getDriveBase().setMotorBrake(brake);
-  }
-
-  public void print(){
-    SubsystemManager.getDriveBase().print();
   }
 }

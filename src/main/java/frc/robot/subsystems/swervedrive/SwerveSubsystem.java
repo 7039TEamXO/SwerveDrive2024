@@ -232,7 +232,6 @@ public class SwerveSubsystem extends SubsystemBase
    */
   public Command aimAtTarget(PhotonCamera camera)
   {
-
     return run(() -> {
       PhotonPipelineResult result = camera.getLatestResult();
       if (result.hasTargets())
@@ -243,6 +242,19 @@ public class SwerveSubsystem extends SubsystemBase
                                                            .getYaw()))); // Not sure if this will work, more math may be required.
       }
     });
+  }
+
+  public Command rotateToAngle(double wantedAngle, double tolerance) {
+    SwerveController controller = swerveDrive.getSwerveController();
+    return run(
+        () -> {
+          drive(ChassisSpeeds.fromFieldRelativeSpeeds(swerveDrive.getRobotVelocity().vxMetersPerSecond,
+                                                      swerveDrive.getRobotVelocity().vyMetersPerSecond,
+                                                      3.0 * controller.headingCalculate(getHeading().getRadians(),
+                                                                                  wantedAngle),
+                                                      getHeading())
+               );
+        }).until(() -> Math.abs(wantedAngle - getHeading().getRadians()) < tolerance);
   }
 
   /**

@@ -4,6 +4,8 @@ import java.io.File;
 
 import javax.xml.transform.Source;
 
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.PS4Controller;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -25,7 +27,7 @@ public class SubsystemManager {
     private static final SwerveSubsystem drivebase = new SwerveSubsystem(new File(Filesystem.getDeployDirectory(),
                                                                          "swerve/falcon"));
 
-    public static CommandPS4Controller ps4Joystick = new CommandPS4Controller(0);
+    public static final CommandPS4Controller ps4Joystick = new CommandPS4Controller(0);
 
     private static IntakeState intakeState;
     private static ShooterState shooterState;
@@ -34,6 +36,8 @@ public class SubsystemManager {
 
     private static RobotState state;
     private static RobotState lastState;
+
+    private static double wantedAngle; 
 
     private static ShooterState lastShooterState;
     private static ConveyorState lastConveyorState;
@@ -62,10 +66,12 @@ public class SubsystemManager {
                         ps4Joystick.square().getAsBoolean() ? RobotState.HIGH_SHOOTER : 
                             ps4Joystick.triangle().getAsBoolean() ? RobotState.LOW_SHOOTER :
                                 ps4Joystick.R1().getAsBoolean() ? RobotState.DEPLETE : lastState;
-        }
 
-        
-        
+            if(ps4Joystick.povUp().getAsBoolean()) { drivebase.rotateToAngle(Math.toRadians(0), 0.05).schedule(); }
+            if(ps4Joystick.povRight().getAsBoolean()) { drivebase.rotateToAngle(Math.toRadians(-90), 0.05).schedule(); }
+            if(ps4Joystick.povDown().getAsBoolean()) { drivebase.rotateToAngle(Math.toRadians(180), 0.05).schedule(); }
+            if(ps4Joystick.povLeft().getAsBoolean()) { drivebase.rotateToAngle(Math.toRadians(90), 0.05).schedule(); }
+        }   
 
         switch (state) {
             case INTAKE:
@@ -123,7 +129,7 @@ public class SubsystemManager {
         Intake.operate(intakeState);
         Shooter.operate(shooterState);
         Conveyor.operate(conveyorState);
-        if (isLocked) {drivebase.lock();}
+        if (isLocked) drivebase.lock();
     }
 
     private static void operateAuto(RobotState chosenState) {
@@ -131,7 +137,7 @@ public class SubsystemManager {
         operate(true);
     }
 
-    public static SwerveSubsystem getDriveBase(){
+    public static SwerveSubsystem getDriveBase() {
         return drivebase;
     }
 }

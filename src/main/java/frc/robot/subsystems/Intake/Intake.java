@@ -36,7 +36,6 @@ public class Intake {
         intakeMotor.set(TalonFXControlMode.PercentOutput , power);
 
         irValue = irInput.getValue();
-        System.out.println(irValue);
     }
 
     // we use 1700 because sensor does not detect anything and distance that he get is 1000, and if booblick in robot we get distance 1800 or more

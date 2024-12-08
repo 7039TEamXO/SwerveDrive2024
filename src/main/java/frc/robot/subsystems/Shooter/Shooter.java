@@ -6,8 +6,9 @@ import com.ctre.phoenix.motorcontrol.can.TalonFX;
 public class Shooter {
     private static TalonFX shooterMaster = new TalonFX(54);
     private static TalonFX shooterSlave = new TalonFX(5);
+    private static ControlMode mode = ControlMode.Velocity;
 
-    private static double wantedVelocity = 0;
+    private static double wanted = 0;
     private static int counter = 0;
 
     public static void init() {
@@ -26,36 +27,34 @@ public class Shooter {
     public static void operate(ShooterState state){
         switch (state) {
             case STOP:
-                wantedVelocity = 0;                
-                break;
-            case AMP_SHOOTING:
-                wantedVelocity = -7500;
+                wanted = 0;
+                mode = ControlMode.PercentOutput;               
                 break;
             case DEFLECT:
-                wantedVelocity = 2500;
+                wanted = 2500;
+                mode = ControlMode.Velocity;
                 break;
             case DEPLETE:
-                wantedVelocity = 0.4;
+                wanted = 0.4;
+                mode = ControlMode.PercentOutput; 
                 break;
             case PODIUM_SHOOTING:
-                wantedVelocity = 13000;
+                wanted = 13000;
+                mode = ControlMode.Velocity;
                 break;
             case SUBWOOFER_SHOOTING:
-                wantedVelocity = -12000;
+                wanted = -12000;
+                mode = ControlMode.Velocity;
                 break;
     
         }
-        if (wantedVelocity == 0) {
-            shooterMaster.set(ControlMode.PercentOutput, 0);
-        } else {
-            shooterMaster.set(ControlMode.Velocity, wantedVelocity);
-        }
+        shooterMaster.set(mode, wanted);
 
     }
 
     public static boolean readyToShoot() {
-        return Math.abs(shooterMaster.getSelectedSensorVelocity()) + 500 > Math.abs(wantedVelocity) && 
-            Math.abs(shooterMaster.getSelectedSensorVelocity()) - 500 < Math.abs(wantedVelocity) &&
-            wantedVelocity != 0;
+        return Math.abs(shooterMaster.getSelectedSensorVelocity()) + 500 > Math.abs(wanted) && 
+            Math.abs(shooterMaster.getSelectedSensorVelocity()) - 500 < Math.abs(wanted) &&
+            wanted != 0;
     }
 }
