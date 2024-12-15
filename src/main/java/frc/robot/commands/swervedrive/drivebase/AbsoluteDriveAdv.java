@@ -76,12 +76,14 @@ public class AbsoluteDriveAdv extends Command
     resetHeading = true;
   }
 
+
+  private double headingX = 0;
+  private double headingY = 0;
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute()
   {
-    double headingX = 0;
-    double headingY = 0;
+   
 
     // These are written to allow combinations for 45 angles
     // Face Away from Drivers
@@ -122,6 +124,7 @@ public class AbsoluteDriveAdv extends Command
     }
 
     ChassisSpeeds desiredSpeeds = swerve.getTargetSpeeds(vX.getAsDouble(), vY.getAsDouble(), headingX, headingY);
+    //desiredSpeeds = desiredSpeeds.times(3);
 
     // Limit velocity to prevent tippy
     Translation2d translation = SwerveController.getTranslation2d(desiredSpeeds);
@@ -131,14 +134,16 @@ public class AbsoluteDriveAdv extends Command
     SmartDashboard.putNumber("LimitedTranslation", translation.getX());
     SmartDashboard.putString("Translation", translation.toString());
 
+    // translation = translation.times(3);
+
     // Make the robot move
     if (headingX == 0 && headingY == 0 && Math.abs(headingAdjust.getAsDouble()) > 0)
     {
       resetHeading = true;
-      swerve.drive(translation, (Constants.OperatorConstants.TURN_CONSTANT * -headingAdjust.getAsDouble()), true);
+      //swerve.drive(translation, 3 * (Constants.OperatorConstants.TURN_CONSTANT * -headingAdjust.getAsDouble()), true);
     } else
     {
-      swerve.drive(translation, desiredSpeeds.omegaRadiansPerSecond, true);
+      swerve.drive(translation, 3 * desiredSpeeds.omegaRadiansPerSecond, true);
     }
   }
 
@@ -152,7 +157,7 @@ public class AbsoluteDriveAdv extends Command
   @Override
   public boolean isFinished()
   {
-    return false;
+    return headingX == 0 && headingY == 0 && Math.abs(headingAdjust.getAsDouble()) > 0;
   }
 
 

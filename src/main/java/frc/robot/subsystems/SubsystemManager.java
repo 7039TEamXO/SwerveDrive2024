@@ -27,7 +27,7 @@ public class SubsystemManager {
     private static final SwerveSubsystem drivebase = new SwerveSubsystem(new File(Filesystem.getDeployDirectory(),
                                                                          "swerve/falcon"));
 
-    public static final CommandPS4Controller ps4Joystick = new CommandPS4Controller(0);
+    private static final CommandPS4Controller ps4Joystick = new CommandPS4Controller(0);
 
     private static IntakeState intakeState;
     private static ShooterState shooterState;
@@ -37,7 +37,6 @@ public class SubsystemManager {
     private static RobotState state;
     private static RobotState lastState;
 
-    private static double wantedAngle; 
 
     private static ShooterState lastShooterState;
     private static ConveyorState lastConveyorState;
@@ -65,12 +64,13 @@ public class SubsystemManager {
                     ps4Joystick.L2().getAsBoolean() && Shooter.readyToShoot() ? RobotState.SHOOT :
                         ps4Joystick.square().getAsBoolean() ? RobotState.HIGH_SHOOTER : 
                             ps4Joystick.triangle().getAsBoolean() ? RobotState.LOW_SHOOTER :
-                                ps4Joystick.R1().getAsBoolean() ? RobotState.DEPLETE : lastState;
+                          
+                          ps4Joystick.R1().getAsBoolean() ? RobotState.DEPLETE : lastState;
 
-            if(ps4Joystick.povUp().getAsBoolean()) { drivebase.rotateToAngle(Math.toRadians(0), 0.05).schedule(); }
-            if(ps4Joystick.povRight().getAsBoolean()) { drivebase.rotateToAngle(Math.toRadians(-90), 0.05).schedule(); }
-            if(ps4Joystick.povDown().getAsBoolean()) { drivebase.rotateToAngle(Math.toRadians(180), 0.05).schedule(); }
-            if(ps4Joystick.povLeft().getAsBoolean()) { drivebase.rotateToAngle(Math.toRadians(90), 0.05).schedule(); }
+            // ps4Joystick.povUp().onTrue(drivebase.rotateToAngle(0, 0.1));
+            // if(ps4Joystick.povRight().getAsBoolean()) { drivebase.rotateToAngle(Math.toRadians(-90), 0.05).schedule(); }
+            // if(ps4Joystick.povDown().getAsBoolean()) { drivebase.rotateToAngle(Math.toRadians(180), 0.05).schedule(); }
+            // if(ps4Joystick.povLeft().getAsBoolean()) { drivebase.rotateToAngle(Math.toRadians(90), 0.05).schedule(); }
         }   
 
         switch (state) {
@@ -139,5 +139,13 @@ public class SubsystemManager {
 
     public static SwerveSubsystem getDriveBase() {
         return drivebase;
+    }
+
+    public static void setDefaultCommand(Command defultCommand){
+        drivebase.setDefaultCommand(defultCommand);
+    }
+
+    public static CommandPS4Controller getpsJoystick(){
+        return ps4Joystick;
     }
 }
