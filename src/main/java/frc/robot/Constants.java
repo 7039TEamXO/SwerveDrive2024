@@ -47,6 +47,11 @@ public final class Constants
     public static final double LEFT_X_DEADBAND  = 0.04;
     public static final double LEFT_Y_DEADBAND  = 0.04;
     public static final double RIGHT_X_DEADBAND = 0.02;
-    public static final double TURN_CONSTANT    = 6;//6
+    public static final double TURN_CONSTANT    = 6;//6 
+    
   }
+
+  //limelight
+  public static final double wantedTY=19.0;
+  public static final double tyTolerance = 0.3;
 }

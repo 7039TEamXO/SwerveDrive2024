@@ -4,6 +4,7 @@ import edu.wpi.first.cscore.HttpCamera;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import frc.robot.subsystems.SubsystemManager;
 
 
 public class Dashboard {
@@ -27,7 +28,7 @@ public class Dashboard {
 
         driver.add("Autos", m_chooser).withPosition(0, 0).withSize(5, 3);
         driver.add("LimeLight Camera", limelightcamera).withPosition(17, 0).withSize(9, 6);
-
+    
     }
 
     public static Autos getSelected() {
