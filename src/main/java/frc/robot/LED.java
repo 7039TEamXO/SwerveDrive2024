@@ -21,9 +21,14 @@ public class LED {
         if(Intake.isGamePieceIn()){
             color = Color.kCyan;
         }
+        else if(Intake.isGamePieceIn() && Limelight.isReadyToShoot()){
+            color = Color.kGreen;
+        }
         else{
             color = Color.kOrangeRed;
         }
+
+        
         for (int i = 0; i < buffer.getLength(); i++) {
 
             buffer.setLED(i, color);
