@@ -5,23 +5,12 @@
 package frc.robot;
 
 import edu.wpi.first.math.MathUtil;
-import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Translation2d;
-import edu.wpi.first.wpilibj.Filesystem;
-import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
-import edu.wpi.first.wpilibj2.command.button.CommandPS4Controller;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.OperatorConstants;
-import frc.robot.commands.swervedrive.drivebase.AbsoluteDriveAdv;
 import frc.robot.subsystems.SubsystemManager;
-import frc.robot.subsystems.Intake.Intake;
-import frc.robot.subsystems.swervedrive.SwerveSubsystem;
-import java.io.File;
-
 import com.pathplanner.lib.auto.NamedCommands;
 
 /**
@@ -108,12 +97,7 @@ public class RobotContainer
     // Configure the trigger bindings
     configureBindings();
 
-    NamedCommands.registerCommand("Intake", SubsystemManager.intakeCommand);
     NamedCommands.registerCommand("Travel", SubsystemManager.travelCommand);
-    NamedCommands.registerCommand("Deplete", SubsystemManager.depleteCommand);
-    NamedCommands.registerCommand("Shoot", SubsystemManager.shootCommand);
-    NamedCommands.registerCommand("HighShooter", SubsystemManager.highShooterConveyorCommand);
-    NamedCommands.registerCommand("LowShooter", SubsystemManager.lowShooterConveyorCommand);
 
     SubsystemManager.setDefaultCommand(driveFieldOrientedAngularVelocity);
 
@@ -151,9 +135,8 @@ public class RobotContainer
   public Command getAutonomousCommand()
   {
     // An example command will be run in autonomous
-    // return drivebase.getAutonomousCommand(Dashboard.getSelected().getAutoName());
-    return SubsystemManager.getDriveBase().getAutonomousCommand(Autos.MID_AUTO.getAutoName());//    return drivebase.getAutonomousCommand(Dashboard.getSelected().getAutoName());
-
+    return SubsystemManager.getDriveBase().getAutonomousCommand(Dashboard.getSelected().getAutoName());
+    
   }
 
   public void setDriveMode()

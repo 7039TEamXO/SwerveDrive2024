@@ -3,7 +3,6 @@ package frc.robot;
 import edu.wpi.first.wpilibj.AddressableLED;
 import edu.wpi.first.wpilibj.AddressableLEDBuffer;
 import edu.wpi.first.wpilibj.util.Color;
-import frc.robot.subsystems.Intake.Intake;
 
 public class LED {
     private static AddressableLEDBuffer buffer = new AddressableLEDBuffer(2000);
@@ -18,16 +17,8 @@ public class LED {
     }
 
     public static void setLedData(){
-        if(Intake.isGamePieceIn()){
-            color = Color.kCyan;
-        }
-        else if(Intake.isGamePieceIn() && Limelight.isReadyToShoot()){
-            color = Color.kGreen;
-        }
-        else{
-            color = Color.kOrangeRed;
-        }
-
+        
+        color = Color.kOrangeRed;
         
         for (int i = 0; i < buffer.getLength(); i++) {
 
